@@ -10,8 +10,14 @@ const App = () => {
     event.preventDefault()
     const newPerson = { name: newName }
 
-    setPersons( [...persons, newPerson ] )
-    setNewName('')
+    const isDuplicate = persons.find(person => person.name === newName)
+
+    if (isDuplicate) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons( [...persons, newPerson ] )
+      setNewName('')
+    }
   }
 
   const handleOnChange = (event) => {
@@ -35,7 +41,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      
+
       {persons.map(({ name }) => 
         <p key={name}>{name}</p>
       )}
