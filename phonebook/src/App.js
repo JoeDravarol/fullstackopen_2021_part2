@@ -2,13 +2,20 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { 
+      name: 'Arto Hellas',
+      number: '040-1234567'
+    }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
-    const newPerson = { name: newName }
+    const newPerson = { 
+      name: newName,
+      number: newNumber
+    }
 
     const isDuplicate = persons.find(person => person.name === newName)
 
@@ -17,11 +24,14 @@ const App = () => {
     } else {
       setPersons( [...persons, newPerson ] )
       setNewName('')
+      setNewNumber('')
     }
   }
 
-  const handleOnChange = (event) => {
-    setNewName(event.target.value)
+  const handleOnChange = (callback) => {
+    return (event) => {
+      callback(event.target.value)
+    }
   }
 
   return (
@@ -29,7 +39,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <form>
         <div>
-          name: <input value={newName} onChange={handleOnChange} />
+          name: <input value={newName} onChange={handleOnChange(setNewName)} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleOnChange(setNewNumber)} />
         </div>
         <div>
           <button 
@@ -42,8 +55,10 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
 
-      {persons.map(({ name }) => 
-        <p key={name}>{name}</p>
+      {persons.map(({ name, number }) => 
+        <p key={name}>
+          {name} {number}
+        </p>
       )}
     </div>
   )
