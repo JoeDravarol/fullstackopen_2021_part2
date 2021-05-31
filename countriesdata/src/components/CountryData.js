@@ -1,0 +1,22 @@
+import React from 'react'
+
+const CountryData = ({ country }) => {
+  return (
+    <>
+      <h1>{country.name}</h1>
+      <p>{country.capital}</p>
+      <p>{country.population}</p>
+
+      <h2>languages</h2>
+      <ul>
+        {country.languages.map(language => 
+          <li key={language.iso639_1}>{language.name}</li>
+        )}
+      </ul>
+
+      <img src={country.flag} alt={`${country.name}'s Flag`} height='150px' width='150px' />
+    </>
+  )
+}
+
+export default CountryData
