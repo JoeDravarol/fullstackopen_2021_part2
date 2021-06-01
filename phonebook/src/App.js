@@ -2,20 +2,19 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
-  const url = 'http://localhost:3001/persons'
 
   useEffect(() => {
-    axios
-      .get(url)
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -31,10 +30,10 @@ const App = () => {
     if (isDuplicate) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      axios
-        .post(url, newPerson)
-        .then(response => {
-          setPersons( [...persons, response.data ])
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons( [...persons, returnedPerson ] )
         })
       setNewName('')
       setNewNumber('')
