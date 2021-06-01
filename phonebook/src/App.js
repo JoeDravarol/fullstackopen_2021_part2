@@ -18,32 +18,17 @@ const App = () => {
       })
   }, [])
 
-  const addPerson = (event) => {
-    event.preventDefault()
+  const addPerson = () => {
     const newPerson = { 
       name: newName,
       number: newNumber
     }
 
-    const isDuplicate = persons.find(person => person.name === newName)
-
-    if (isDuplicate) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      personService
-        .create(newPerson)
-        .then(returnedPerson => {
-          setPersons( [...persons, returnedPerson ] )
-        })
-      setNewName('')
-      setNewNumber('')
-    }
-  }
-
-  const handleOnChange = (callback) => {
-    return (event) => {
-      callback(event.target.value)
-    }
+    personService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons( [...persons, returnedPerson ] )
+      })
   }
 
   const removePerson = (name, id) => {
@@ -56,6 +41,45 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(p => p.id !== id))
       })
+  }
+
+  const updatePerson = () => {
+    const confirmUpdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+
+    if (!confirmUpdate) return null
+  
+    const person = persons.find(person => person.name === newName)
+    const changedPerson = {
+      ...person,
+      number: newNumber
+    }
+
+    personService
+      .update(person.id, changedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+      })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const isDuplicate = persons.find(person => person.name === newName)
+
+    if (isDuplicate) {
+      updatePerson()
+    } else {
+      addPerson()
+    }
+
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const handleOnChange = (callback) => {
+    return (event) => {
+      callback(event.target.value)
+    }
   }
 
   return (
@@ -73,7 +97,7 @@ const App = () => {
         newNumber={newNumber}
         handleNameChange={handleOnChange(setNewName)}
         handleNumberChange={handleOnChange(setNewNumber)}
-        handleSubmit={addPerson}
+        handleSubmit={handleSubmit}
       />
       
       <h2>Numbers</h2>
