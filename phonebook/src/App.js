@@ -9,9 +9,9 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const url = 'http://localhost:3001/persons'
 
   useEffect(() => {
-    const url = 'http://localhost:3001/persons'
     axios
       .get(url)
       .then(response => {
@@ -31,7 +31,11 @@ const App = () => {
     if (isDuplicate) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons( [...persons, newPerson ] )
+      axios
+        .post(url, newPerson)
+        .then(response => {
+          setPersons( [...persons, response.data ])
+        })
       setNewName('')
       setNewNumber('')
     }
