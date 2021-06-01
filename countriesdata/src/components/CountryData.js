@@ -5,8 +5,8 @@ const CountryData = ({ country }) => {
   return (
     <>
       <h1>{country.name}</h1>
-      <p>{country.capital}</p>
-      <p>{country.population}</p>
+      <p>capital: {country.capital}</p>
+      <p>population: {country.population}</p>
 
       <h2>languages</h2>
       <ul>

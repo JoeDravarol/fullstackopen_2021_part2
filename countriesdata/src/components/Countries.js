@@ -21,7 +21,7 @@ const Countries = ({ countries, filterBy, showCountryBy }) => {
     : (
       <div>
         {filteredCountries.map(country => (
-          <div>
+          <div key={country.alpha2Code}>
             {country.name} <button onClick={() => showCountryBy(country.name)}>show</button>
           </div>
         ))}
