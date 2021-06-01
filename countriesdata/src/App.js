@@ -29,6 +29,7 @@ const App = () => {
       <Countries
         countries={countries}
         filterBy={filterBy}
+        showCountryBy={setFilterBy}
       />
     </div>
   )

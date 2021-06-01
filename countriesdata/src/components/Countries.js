@@ -1,7 +1,7 @@
 import React from 'react'
 import CountryData from './CountryData';
 
-const Countries = ({ countries, filterBy }) => {
+const Countries = ({ countries, filterBy, showCountryBy }) => {
   const filteredCountries = countries.filter(country => {
     return country.name.toLowerCase().includes(filterBy.toLowerCase())
   })
@@ -16,17 +16,16 @@ const Countries = ({ countries, filterBy }) => {
     return <p>No match in the database, specify another filter</p>
   }
 
-  if (filteredCountries.length === 1) {
-    return <CountryData country={filteredCountries[0]} />
-  }
-
-  return (
-    <div>
-      {filteredCountries.map(country =>
-        <p key={country.alpha2Code}>{country.name}</p>
-      )}
-    </div>
-  )
+  return filteredCountries.length === 1 
+    ? <CountryData country={filteredCountries[0]} />
+    : (
+      <div>
+        {filteredCountries.map(country => (
+          <div>
+            {country.name} <button onClick={() => showCountryBy(country.name)}>show</button>
+          </div>
+        ))}
+      </div>)
 }
 
 export default Countries
