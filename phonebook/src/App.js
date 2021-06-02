@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [message, setMessage] = useState({ content: null, status: 'pending' })
 
   useEffect(() => {
     personService
@@ -17,6 +19,19 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
+
+  const updateNotification = (message, status = 'success') => {
+    const initialMessage = { content: null, status: 'pending' }
+    const newMessage = {
+      content: message,
+      status
+    }
+
+    setMessage(newMessage)
+    setTimeout(() => {
+      setMessage(initialMessage)
+    }, 3000)
+  }
 
   const addPerson = () => {
     const newPerson = { 
@@ -28,6 +43,7 @@ const App = () => {
       .create(newPerson)
       .then(returnedPerson => {
         setPersons( [...persons, returnedPerson ] )
+        updateNotification(`Added ${returnedPerson.name} to the phonebook`)
       })
   }
 
@@ -40,6 +56,7 @@ const App = () => {
       .remove(id)
       .then(() => {
         setPersons(persons.filter(p => p.id !== id))
+        updateNotification(`${name} is succesfully removed from server`)
       })
   }
 
@@ -58,6 +75,7 @@ const App = () => {
       .update(person.id, changedPerson)
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+        updateNotification(`Updated ${returnedPerson.name}'s number`)
       })
   }
 
@@ -85,6 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter 
         filterName={filterName} 
         handleOnChange={handleOnChange(setFilterName)} 
