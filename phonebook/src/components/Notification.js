@@ -5,7 +5,7 @@ const Notification = ({ message: { content, status } }) => {
   if (content === null) return null
 
   return (
-    <div className={`notification ${status === 'error' ? 'notification-error' : ''}}`}>
+    <div className={`notification ${status === 'error' ? 'notification-error' : ''}`}>
       {content}
     </div>
   )

@@ -58,6 +58,13 @@ const App = () => {
         setPersons(persons.filter(p => p.id !== id))
         updateNotification(`${name} is succesfully removed from server`)
       })
+      .catch(() => {
+        setPersons(persons.filter(p => p.id !== id))
+        updateNotification(
+          `Information of ${name} has already been removed from server`,
+          'error'
+        )
+      })
   }
 
   const updatePerson = () => {
@@ -76,6 +83,13 @@ const App = () => {
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
         updateNotification(`Updated ${returnedPerson.name}'s number`)
+      })
+      .catch(() => {
+        setPersons(persons.filter(p => p.id !== person.id))
+        updateNotification(
+          `Information of ${person.name} has already been removed from server`,
+          'error'
+        )
       })
   }
 
