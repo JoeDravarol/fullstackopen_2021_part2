@@ -45,6 +45,9 @@ const App = () => {
         setPersons( [...persons, returnedPerson ] )
         updateNotification(`Added ${returnedPerson.name} to the phonebook`)
       })
+      .catch(error => {
+        updateNotification(error.response.data.error, 'error')
+      })
   }
 
   const removePerson = (name, id) => {
@@ -84,12 +87,8 @@ const App = () => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
         updateNotification(`Updated ${returnedPerson.name}'s number`)
       })
-      .catch(() => {
-        setPersons(persons.filter(p => p.id !== person.id))
-        updateNotification(
-          `Information of ${person.name} has already been removed from server`,
-          'error'
-        )
+      .catch(error => {
+        updateNotification(error.response.data.error, 'error')
       })
   }
 
